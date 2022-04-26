@@ -10,7 +10,7 @@ public class Ejercicio2_1 {
 
         
 
-        File f = new File("src/penyagolosa.bmp");;
+        File f = new File("Resource/penyagolosa.bmp");;
         
 
         TransformaImagen ti = new TransformaImagen(f);

@@ -17,25 +17,34 @@ public class TransformaImagen {
     public void transformaNegativo() throws IOException {
         BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f));
         String name = getNombreSinExtension() + "_n.bmp";
-        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("src/" + name));
+        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("Resource/" + name));
         // Transformar a negativo y guardar como *_n.bmp
-        byte[] cuerpo = bis.readAllBytes();
-        int[] cuerpoAux = new int[cuerpo.length];
-        for (int i = 53; i < cuerpoAux.length; i++) {
-            cuerpoAux[i] = cuerpo[i];
-            cuerpoAux[i] = 255 - cuerpo[i];
+        byte[] cabecera = bis.readNBytes(54);
+        bos.write(cabecera);
+        int canal = bis.read();
+        while (canal != -1){
+            bos.write(255 - canal);
+            canal = bis.read();
         }
-        for (int i = 0; i < cuerpoAux.length; i++) {
-            cuerpo[i] = (byte) cuerpoAux[i];
-        }
-        bos.write(cuerpo);
+        bis.close();
+        bos.close();
     }
 
     public void transformaOscuro() throws IOException {
 
-        // Transformar a una imagen más oscura y guardar como *_o.bmp
-
-
+        BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f));
+        String name = getNombreSinExtension() + "_o.bmp";
+        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("Resource/" + name));
+        // Transformar a oscuro y guardar como *_o.bmp
+        byte[] cabecera = bis.readNBytes(54);
+        bos.write(cabecera);
+        int canal = bis.read();
+        while (canal != -1){
+            bos.write(canal/2);
+            canal = bis.read();
+        }
+        bis.close();
+        bos.close();
     }
 
 
