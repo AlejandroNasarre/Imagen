@@ -22,7 +22,7 @@ public class TransformaImagen {
         byte[] cabecera = bis.readNBytes(54);
         bos.write(cabecera);
         int canal = bis.read();
-        while (canal != -1){
+        while (canal != -1) {
             bos.write(255 - canal);
             canal = bis.read();
         }
@@ -39,8 +39,8 @@ public class TransformaImagen {
         byte[] cabecera = bis.readNBytes(54);
         bos.write(cabecera);
         int canal = bis.read();
-        while (canal != -1){
-            bos.write(canal/2);
+        while (canal != -1) {
+            bos.write(canal / 2);
             canal = bis.read();
         }
         bis.close();
@@ -50,7 +50,32 @@ public class TransformaImagen {
 
     public void transformaBlancoNegro() throws IOException {
 
-        // Transformar a una imagen en blanco y negro y guardar como *_bn.bmp
+        BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f));
+        String name = getNombreSinExtension() + "_bn.bmp";
+        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("Resource/" + name));
+        // Transformar a blanco y negro y guardar como *_bn.bmp
+        byte[] cabecera = bis.readNBytes(54);
+        bos.write(cabecera);
+        int canal = bis.read();
+        while (canal != -1) {
+            int aux1 = canal;
+            canal = bis.read();
+            int aux2 = canal;
+            canal = bis.read();
+            int media = (aux1 + aux2 + canal) / 3;
+            if (media < 127) {
+                bos.write(0);
+                bos.write(0);
+                bos.write(0);
+            } else {
+                bos.write(255);
+                bos.write(255);
+                bos.write(255);
+            }
+            canal = bis.read();
+        }
+        bis.close();
+        bos.close();
 
     }
 
